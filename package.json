@@ -1,0 +1,9 @@
+{
+    "name": "metamoji-mobile-builder",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Build Userscript and Bookmarklet from src/main.js",
+    "scripts": {
+        "build": "node script/build.js"
+    }
+}
