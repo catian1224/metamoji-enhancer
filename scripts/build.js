@@ -45,6 +45,78 @@ function recreateDirectory(directory) {
     fs.mkdirSync(directory, { recursive: true });
 }
 
+function crc32(buffer) {
+    let crc = 0xffffffff;
+    for (const byte of buffer) {
+        crc ^= byte;
+        for (let bit = 0; bit < 8; bit += 1) {
+            crc = (crc >>> 1) ^ (crc & 1 ? 0xedb88320 : 0);
+        }
+    }
+    return (crc ^ 0xffffffff) >>> 0;
+}
+
+function createZip(entries) {
+    const localParts = [];
+    const centralParts = [];
+    let offset = 0;
+
+    for (const { name, data } of entries) {
+        const nameBuffer = Buffer.from(name, "utf8");
+        const checksum = crc32(data);
+        const localHeader = Buffer.alloc(30 + nameBuffer.length);
+        localHeader.writeUInt32LE(0x04034b50, 0);
+        localHeader.writeUInt16LE(20, 4);
+        localHeader.writeUInt16LE(0, 6);
+        localHeader.writeUInt16LE(0, 8);
+        localHeader.writeUInt16LE(0, 10);
+        localHeader.writeUInt16LE(0, 12);
+        localHeader.writeUInt32LE(checksum, 14);
+        localHeader.writeUInt32LE(data.length, 18);
+        localHeader.writeUInt32LE(data.length, 22);
+        localHeader.writeUInt16LE(nameBuffer.length, 26);
+        localHeader.writeUInt16LE(0, 28);
+        nameBuffer.copy(localHeader, 30);
+        localParts.push(localHeader, data);
+
+        const centralHeader = Buffer.alloc(46 + nameBuffer.length);
+        centralHeader.writeUInt32LE(0x02014b50, 0);
+        centralHeader.writeUInt16LE(20, 4);
+        centralHeader.writeUInt16LE(20, 6);
+        centralHeader.writeUInt16LE(0, 8);
+        centralHeader.writeUInt16LE(0, 10);
+        centralHeader.writeUInt16LE(0, 12);
+        centralHeader.writeUInt16LE(0, 14);
+        centralHeader.writeUInt32LE(checksum, 16);
+        centralHeader.writeUInt32LE(data.length, 20);
+        centralHeader.writeUInt32LE(data.length, 24);
+        centralHeader.writeUInt16LE(nameBuffer.length, 28);
+        centralHeader.writeUInt16LE(0, 30);
+        centralHeader.writeUInt16LE(0, 32);
+        centralHeader.writeUInt16LE(0, 34);
+        centralHeader.writeUInt16LE(0, 36);
+        centralHeader.writeUInt32LE(0, 38);
+        centralHeader.writeUInt32LE(offset, 42);
+        nameBuffer.copy(centralHeader, 46);
+        centralParts.push(centralHeader);
+
+        offset += localHeader.length + data.length;
+    }
+
+    const centralDirectory = Buffer.concat(centralParts);
+    const endRecord = Buffer.alloc(22);
+    endRecord.writeUInt32LE(0x06054b50, 0);
+    endRecord.writeUInt16LE(0, 4);
+    endRecord.writeUInt16LE(0, 6);
+    endRecord.writeUInt16LE(entries.length, 8);
+    endRecord.writeUInt16LE(entries.length, 10);
+    endRecord.writeUInt32LE(centralDirectory.length, 12);
+    endRecord.writeUInt32LE(offset, 16);
+    endRecord.writeUInt16LE(0, 20);
+
+    return Buffer.concat([...localParts, centralDirectory, endRecord]);
+}
+
 function buildRuntime(sourceCode) {
     const body = sourceCode
         .split(/\r?\n/)
@@ -96,6 +168,14 @@ function buildChromeExtension(runtimeCode) {
         path.join(outputs.chromeExtension, "content.js"),
         runtimeCode,
         "utf8",
+    );
+    const extensionFiles = ["manifest.json", "content.js"].map((name) => ({
+        name,
+        data: fs.readFileSync(path.join(outputs.chromeExtension, name)),
+    }));
+    fs.writeFileSync(
+        path.join(outputs.chromeExtension, "metamoji-enhancer-extension.zip"),
+        createZip(extensionFiles),
     );
 }
 

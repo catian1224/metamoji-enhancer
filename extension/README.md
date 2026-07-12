@@ -13,6 +13,7 @@ It contains:
 
 - `manifest.json`: generated from `extension/manifest.json`
 - `content.js`: the shared desktop/mobile runtime
+- `metamoji-enhancer-extension.zip`: a ZIP archive containing the two files
 
 No Chrome permissions are required beyond the declared ClassRoom 3 content
 script match.
