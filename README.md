@@ -14,21 +14,17 @@ nothing when the selection is collapsed.
 
 ## Installation
 
-Metamoji Enhancer is available in three formats. All formats use the same
-source code and provide the same text features.
+Download the latest release from the
+[GitHub Releases page](https://github.com/catian1224/metamoji-enhancer/releases/latest).
+The release includes a Bookmarklet, a Userscript, and a Chrome Extension ZIP.
 
 ### Chrome Extension
 
-1. Open `chrome://extensions` in Chrome.
-2. Turn on **Developer mode**.
-3. Click **Load unpacked**.
-4. Select the `dist/chrome-extension` directory.
-
-To rebuild the extension after changing the source, run:
-
-```sh
-npm run build:extension
-```
+1. Download the Chrome Extension ZIP from the latest release.
+2. Extract the ZIP file.
+3. Open `chrome://extensions` in Chrome.
+4. Turn on **Developer mode**.
+5. Click **Load unpacked** and select the extracted directory.
 
 ### Userscript
 
@@ -38,13 +34,13 @@ The Userscript works in desktop browsers and iOS Safari.
 
 1. Install a userscript extension such as [Userscripts](https://apps.apple.com/jp/app/userscripts/id1463298887).
 2. Enable the extension in the Settings app or in Safari.
-3. Download [`dist/userscript/metamoji-enhancer.user.js`](./dist/userscript/metamoji-enhancer.user.js)
-   into the Userscripts directory.
+3. Download `metamoji-enhancer.user.js` from the latest release into the
+   Userscripts directory.
 4. Enable Metamoji Enhancer in the userscript extension.
 
 #### Desktop
 
-Install [`dist/userscript/metamoji-enhancer.user.js`](./dist/userscript/metamoji-enhancer.user.js)
+Download `metamoji-enhancer.user.js` from the latest release and install it
 with a userscript manager such as
 [Tampermonkey](https://www.tampermonkey.net/) or
 [Violentmonkey](https://violentmonkey.github.io/).
@@ -53,7 +49,7 @@ with a userscript manager such as
 
 The Bookmarklet works in any browser.
 
-1. Copy the contents of [`dist/bookmarklet/metamoji-enhancer.min.js`](./dist/bookmarklet/metamoji-enhancer.min.js).
+1. Copy the contents of `metamoji-enhancer.min.js` from the latest release.
 2. Create a new bookmark and paste the code into its URL field.
 3. Open a MetaMoJi ClassRoom 3 page and run the bookmarklet.
 
