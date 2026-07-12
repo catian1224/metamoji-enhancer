@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Metamoji Enhancer",
+    "version": "2.0.0",
+    "description": "Enhance MetaMoJi ClassRoom 3",
+    "minimum_chrome_version": "102",
+    "content_scripts": [
+        {
+            "matches": ["https://classroom.metamoji.com/cr/*"],
+            "js": ["content.js"],
+            "run_at": "document_start"
+        }
+    ]
+}

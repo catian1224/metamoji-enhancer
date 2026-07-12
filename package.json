@@ -1,9 +1,13 @@
 {
-    "name": "metamoji-mobile-builder",
-    "version": "1.0.0",
+    "name": "metamoji-enhancer",
+    "version": "2.0.0",
     "private": true,
-    "description": "Build Userscript and Bookmarklet from src/main.js",
+    "description": "Enhance MetaMoJi ClassRoom 3",
     "scripts": {
-        "build": "node script/build.js"
+        "build": "node scripts/build.js",
+        "build:bookmarklet": "node scripts/build.js bookmarklet",
+        "build:extension": "node scripts/build.js extension",
+        "build:userscript": "node scripts/build.js userscript",
+        "test": "node --test"
     }
 }
