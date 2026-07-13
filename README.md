@@ -1,6 +1,6 @@
-# Metamoji Enhancer
+# MetaMoJi Enhancer
 
-Metamoji Enhancer extends [MetaMoJi ClassRoom 3](https://product.metamoji.com/classroom/)
+MetaMoJi Enhancer extends [MetaMoJi ClassRoom 3](https://product.metamoji.com/classroom/)
 with a few small text-editing improvements for desktop and mobile browsers.
 
 ## Features
